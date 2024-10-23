@@ -9,7 +9,7 @@ npm (version 6 or higher)
 SQLite or MongoDB (for database)
 
 # Installation
-Clone the repository: git clone https://https://github.com/Karthik18v/flowai-backend.git
+Clone the repository: git clone https://github.com/Karthik18v/flowai-backend.git
 Install dependencies: npm install
 Create a .env file with the following variables:
 DB_TYPE (either sqlite or mongodb)
