@@ -50,10 +50,32 @@ app.post("/transactions", async (request, response) => {
 
 app.get("/transactions", async (request, response) => {
   try {
-    const transactions = await Transaction.find();
-    response.status(200).json(transactions);
+    // Extract query parameters for pagination
+    let { offset = 0, limit = 1 } = req.query;
+
+    // Convert query parameters to numbers
+    offset = parseInt(offset);
+    limit = parseInt(limit);
+
+    // Fetch transactions using offset and limit
+    const transactions = await Transaction.find()
+      .skip(offset) // Skip the specified number of documents
+      .limit(limit) // Limit the number of documents returned
+      .sort({ date: -1 }); // Optional: Sort by date in descending order
+
+    // Count the total number of transactions in the collection
+    const total = await Transaction.countDocuments();
+
+    // Respond with the transactions and pagination info
+    response.json({
+      offset,
+      limit,
+      total,
+      data: transactions,
+    });
   } catch (error) {
-    response.status(500).json({ message: error.message });
+    console.error("Error fetching transactions:", error);
+    response.status(500).json({ error: "Failed to fetch transactions" });
   }
 });
 
